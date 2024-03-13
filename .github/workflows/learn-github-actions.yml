@@ -28,3 +28,6 @@ jobs:
       -
         name: Start services
         run: docker compose up --wait --no-build
+      -
+        name: Check HTTP reachability
+        run: curl -v --fail-with-body http://localhost
