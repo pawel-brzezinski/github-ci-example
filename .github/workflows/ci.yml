@@ -1,9 +1,9 @@
-name: CI workflow
+name: CI
 run-name: Run CI workflow for ${{ github.ref_name }} branch
 on: [push]
 jobs:
   tests:
-    name: Running code tests
+    name: Tests
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout
