@@ -5,15 +5,14 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    steps:
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Setup and Build Docker
         uses: ./.github/actions/setup-and-build-docker
         with:
           ref: ${{ github.ref }}
-        
-      # -
-      #   name: Checkout
-      #   uses: actions/checkout@v4
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v3
