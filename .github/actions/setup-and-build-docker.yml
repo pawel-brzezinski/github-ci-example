@@ -1,0 +1,11 @@
+name: 'Setup and Build Docker'
+description: 'Checkout code, setup Docker Buildx, and build Docker images.'
+inputs:
+  ref:
+    description: 'The GitHub ref that triggered the workflow.'
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
