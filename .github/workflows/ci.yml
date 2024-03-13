@@ -2,8 +2,8 @@ name: CI
 run-name: Run CI workflow for ${{ github.ref_name }} branch
 on: [push]
 jobs:
-  tests:
-    name: Tests
+  reachability:
+    name: Reachability
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout
@@ -11,6 +11,10 @@ jobs:
 
       - name: Setup and Build Docker
         uses: ./.github/actions/setup-and-build-docker
+
+      - name: Check HTTP reachability
+        run: curl -v --fail-with-body http://localhost
+
       # -
       #   name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v3
