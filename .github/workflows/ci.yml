@@ -1,73 +1,35 @@
-name: CI
-
-on:
-  push:
-    branches:
-      - main
-  pull_request: ~
-  workflow_dispatch: ~
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
-  cancel-in-progress: true
-
+name: CI workflow
+run-name: Run CI workflow for ${{ github.ref_name }} branch
+on: [push]
 jobs:
   tests:
-    name: Tests
+    name: Running code tests
     runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
+    steps: 
+      - name: Checkout
         uses: actions/checkout@v4
-      -
-        name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      -
-        name: Build Docker images
-        uses: docker/bake-action@v4
-        with:
-          pull: true
-          load: true
-          files: |
-            compose.yaml
-            compose.override.yaml
-          set: |
-            *.cache-from=type=gha,scope=${{github.ref}}
-            *.cache-from=type=gha,scope=refs/heads/main
-            *.cache-to=type=gha,scope=${{github.ref}},mode=max
-      -
-        name: Start services
-        run: docker compose up --wait --no-build
-      -
-        name: Check HTTP reachability
-        run: curl -v --fail-with-body http://localhost
-      -
-        name: Check HTTPS reachability
-        if: false # Remove this line when the homepage will be configured, or change the path to check
-        run: curl -vk --fail-with-body https://localhost
-      -
-        name: Create test database
-        if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:database:create
-      -
-        name: Run migrations
-        if: false # Remove this line if Doctrine Migrations is installed
-        run: docker compose exec -T php bin/console -e test doctrine:migrations:migrate --no-interaction
-      -
-        name: Run PHPUnit
-        if: false # Remove this line if PHPUnit is installed
-        run: docker compose exec -T php bin/phpunit
-      -
-        name: Doctrine Schema Validator
-        if: false # Remove this line if Doctrine ORM is installed
-        run: docker compose exec -T php bin/console -e test doctrine:schema:validate
-  lint:
-    name: Docker Lint
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Lint Dockerfile
-        uses: hadolint/hadolint-action@v3.1.0
+
+      - name: Setup and Build Docker
+        uses: ./.github/actions/setup-and-build-docker
+      # -
+      #   name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+      # -
+      #   name: Build Docker images
+      #   uses: docker/bake-action@v4
+      #   with:
+      #     pull: true
+      #     load: true
+      #     files: |
+      #       compose.yaml
+      #       compose.override.yaml
+      #     set: |
+      #       *.cache-from=type=gha,scope=${{github.ref}}
+      #       *.cache-from=type=gha,scope=refs/heads/main
+      #       *.cache-to=type=gha,scope=${{github.ref}},mode=max
+      # -
+      #   name: Start services
+      #   run: docker compose up --wait --no-build
+      # -
+      #   name: Check HTTP reachability
+      #   run: curl -v --fail-with-body http://localhost
