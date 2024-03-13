@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup and Build Docker
-        uses: ./.github/actions/setup-and-build-docker.yml
+        uses: ./.github/actions/setup-and-build-docker
         with:
           ref: ${{ github.ref }}
         
