@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Setup and Build Docker
+        uses: ./.github/actions/setup-and-build-docker
       - name: Copy PHPUnit config file
         run: docker compose exec -T php cp phpunit.xml.dist phpunit.xml
       - name: Unit Tests
