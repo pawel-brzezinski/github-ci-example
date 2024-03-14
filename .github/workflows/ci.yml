@@ -20,7 +20,11 @@ jobs:
     # needs: reachability
     runs-on: ubuntu-latest
     steps:
+      - name: Where Am I?
+        run: pwd
+      - name: What is there?
+        run: ls -la
       - name: Copy PHPUnit config file
-        run: docker compose -f compose.yaml -f compose.override.yaml exec -T php cp phpunit.xml.dist phpunit.xml
+        run: docker compose -f ./compose.yaml -f ./compose.override.yaml exec -T php cp phpunit.xml.dist phpunit.xml
       - name: Unit Tests
-        run: docker compose -f compose.yaml -f compose.override.yaml exec -T php XDEBUG_MODE=off bin/phpunit -c ./phpunit.xml ./tests/Unit
+        run: docker compose -f ./compose.yaml -f ./compose.override.yaml exec -T php XDEBUG_MODE=off bin/phpunit -c ./phpunit.xml ./tests/Unit
