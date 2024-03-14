@@ -15,6 +15,23 @@ jobs:
       - name: Check HTTP reachability
         run: curl -v --fail-with-body http://localhost
 
+  code-quality:
+    name: Code Quality
+    # needs: reachability
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup and Build Docker
+        uses: ./.github/actions/setup-and-build-docker
+
+      - name: Copy PHPStan config file
+        run: docker compose exec -T php cp phpstan.dist.neon phpstan.neon
+      
+      - name: Run PHPStan
+        run: docker compose exec -T php vendor/bin/phpstan analyse -c ./phpstan.neon
+
   tests:
     name: Unit Tests
     # needs: reachability
@@ -41,5 +58,5 @@ jobs:
       - name: Integration Tests
         run: docker compose exec -T php bin/phpunit -c ./phpunit.xml ./tests/Integration
 
-      - name: Integration Functional
+      - name: Functional Tests
         run: docker compose exec -T php bin/phpunit -c ./phpunit.xml ./tests/Functional
