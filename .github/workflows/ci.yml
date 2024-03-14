@@ -23,4 +23,4 @@ jobs:
       - name: Copy PHPUnit config file
         run: docker compose exec -T php cp phpunit.xml.dist phpunit.xml
       - name: Unit Tests
-        run: docker compose exec -T php XDEBUG_MODE=off bin/phpunit -c ./phpunit.xml ./tests/Unit
+        run: docker compose -f compose.yml -f compose.override.yaml exec -T php XDEBUG_MODE=off bin/phpunit -c ./phpunit.xml ./tests/Unit
