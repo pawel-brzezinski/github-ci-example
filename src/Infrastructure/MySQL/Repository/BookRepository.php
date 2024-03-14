@@ -9,16 +9,27 @@ use App\Domain\Book\Repository\BookRepositoryInterface;
 use App\Domain\Shared\Exception\NotFoundException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Exception;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
+/**
+ * @template-extends  ServiceEntityRepository<Book>
+ */
 final class BookRepository extends ServiceEntityRepository implements BookRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Book::class);
+        /** @var class-string<Book> $entityName */
+        $entityName = Book::class;
+
+        parent::__construct($registry, $entityName);
     }
 
+    /**
+     * @throws Exception
+     * @throws NotFoundException
+     */
     public function get(Uuid $uuid): Book
     {
         $queryBuilder = $this->createQueryBuilder('b');
@@ -29,6 +40,10 @@ final class BookRepository extends ServiceEntityRepository implements BookReposi
 
         if (null === $result = $queryBuilder->getQuery()->getOneOrNullResult()) {
             throw new NotFoundException();
+        }
+
+        if (!$result instanceof Book) {
+            throw new Exception('The result should be an object');
         }
 
         return $result;
