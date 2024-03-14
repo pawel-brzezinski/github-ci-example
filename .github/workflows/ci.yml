@@ -17,7 +17,7 @@ jobs:
 
   code-quality:
     name: Code Quality
-    # needs: reachability
+    needs: reachability
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,8 +33,8 @@ jobs:
         run: docker compose exec -T php vendor/bin/phpstan analyse -c ./phpstan.neon
 
   tests:
-    name: Unit Tests
-    # needs: reachability
+    name: Tests
+    needs: reachability
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
