@@ -21,4 +21,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Unit Tests
-        run: docker compose exec -T XDEBUG_MODE=off php bin/console ./tests/Unit
+        run: docker compose exec -T php XDEBUG_MODE=off bin/console ./tests/Unit
