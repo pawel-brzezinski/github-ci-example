@@ -37,3 +37,9 @@ jobs:
       
       - name: Unit Tests
         run: docker compose exec -T php bin/phpunit -c ./phpunit.xml ./tests/Unit
+      
+      - name: Integration Tests
+        run: docker compose exec -T php bin/phpunit -c ./phpunit.xml ./tests/Integration
+
+      - name: Integration Functional
+        run: docker compose exec -T php bin/phpunit -c ./phpunit.xml ./tests/Functional
